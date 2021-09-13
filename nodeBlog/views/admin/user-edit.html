@@ -1,0 +1,65 @@
+{{extend './common/layout.html'}}
+{{block 'main'}}
+{{include './common/header.html'}}
+
+    <!-- 主体内容 -->
+    <div class="content">
+        {{include './common/aside.html'}}
+
+        <div class="main">
+            <!-- 分类标题 -->
+            <div class="title">
+                <h4 style="display: {{button == '修改'?'block':'none'}};">{{@user && user._id}}</h4>
+                <p class="tips">{{message}}</p>
+            </div>
+            <!-- /分类标题 -->
+            <form class="form-container" action="{{link}}" method="POST" id="loginForm">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" class="form-control" placeholder="请输入用户名" name="username"  value="{{user && user.username}}">
+                </div>
+                <div class="form-group">
+                    <label>邮箱</label>
+                    <input type="email" class="form-control" placeholder="请输入邮箱地址" name="email" value="{{user && user.email}}">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" class="form-control" placeholder="请输入密码" name="password" >
+                </div>
+                <div class="form-group">
+                    <label>角色</label>
+                    <select class="form-control" name="role">
+                        <option value="normal" {{user && user.role == 'normal'?'selected':''}}>普通用户</option>
+                        <option value="admin" {{user && user.role == 'admin'?'selected':''}}>超级管理员</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>状态</label>
+                    <select class="form-control" name="state">
+                        <option value="0" {{user && user.state == 0?'selected':''}}>启用</option>
+                        <option value="1" {{user && user.state == 1?'selected':''}}>禁用</option>
+                    </select>
+                </div>
+                <div class="buttons">
+                    <input type="submit" class="btn btn-primary" value="{{button}}">
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- /主体内容 -->
+    {{/block}}
+    {{block 'script'}}
+    <script src="/admin/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/admin/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script>
+        // 客户端先要验证用户名密码
+
+        $('#loginForm').on('submit', function () {
+            var result = serializeToJson($(this));
+            if(result.username.trim().length==0|| result.email.trim().length==0 || result.password.trim().length==0){
+                alert('用户信息填写不完整');
+                return false
+            }
+        })
+    </script>
+{{/block}}

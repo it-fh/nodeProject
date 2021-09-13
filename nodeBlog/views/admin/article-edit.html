@@ -1,0 +1,89 @@
+{{extend './common/layout.html'}}
+{{block 'main'}}
+{{include './common/header.html'}}
+    <!-- 主体内容 -->
+    <div class="content">
+{{include './common/aside.html'}}
+     
+        <div class="main">
+            <!-- 分类标题 -->
+            <div class="title">
+                <h4>5b9a716cb2d2bf17706bcc0a</h4>
+            </div>
+
+<!-- 
+    form 表单的属性 enctype:指定表单数据的编码类型
+    application/x-www-form-urlencoded(默认):name=zhangsan&age=20
+    mulitpart/form-data: 将表单数据编码成二进制类型(当涉及到文件上传时)
+ -->
+
+
+
+            <!-- /分类标题 -->
+            <form class="form-container" action="/admin/article-add" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>标题</label>
+                    <input type="text" class="form-control" placeholder="请输入文章标题" name="title">
+                </div>
+                <div class="form-group">
+                    <label>作者</label>
+                    <input type="text" class="form-control" readonly name="author" value="{{@userInfo._id}}">
+                </div>
+                <div class="form-group">
+                    <label>发布时间</label>
+                    <input type="date" class="form-control" name="publishDate">
+                </div>
+                
+                <div class="form-group">
+                   <label for="exampleInputFile">文章封面</label>
+                   <input type="file" name="cover" id='file'>
+                   <div class="thumbnail-waper">
+                       <img class="img-thumbnail" src="" id="preview">
+                   </div>
+                </div>
+                <div class="form-group">
+                    <label>内容</label>
+                    <textarea class="form-control" id="editor" name="content"></textarea>
+                </div>
+                <div class="buttons">
+                    <input type="submit" class="btn btn-primary">
+                </div>
+            </form>
+            
+        </div>
+    </div>
+    <!-- /主体内容 -->
+    {{/block}}
+    {{block 'script'}}
+    <script src="/admin/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/admin/lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/admin/lib/ckeditor5/ckeditor.js"></script>
+    <script type="text/javascript">
+    
+        let editor;
+
+        ClassicEditor
+                .create( document.querySelector('#editor'))
+                .then(newEditor => {
+                    editor = newEditor;
+                })
+                .catch( error => {
+                    console.error( error );
+                });
+
+        // 获取数据
+        // const editorData = editor.getData();
+
+
+
+        var file = document.getElementById('file');
+        var preview = document.getElementById('preview')
+        file.onchange = function(){
+            var reader = new FileReader();
+            reader.readAsDataURL(this.files[0]);
+            reader.onload = function(){
+               preview.src = reader.result
+            }
+        }
+    </script>
+    {{/block}}
